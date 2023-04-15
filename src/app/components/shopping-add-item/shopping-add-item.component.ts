@@ -13,6 +13,6 @@ export class ShoppingAddItemComponent {
   addItemEvent = new EventEmitter<string>();
 
   addItem(): void {
-    
+
   }
 }
