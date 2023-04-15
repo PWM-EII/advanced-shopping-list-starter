@@ -1,0 +1,46 @@
+<div class="row">
+  <div class="col-4  ">
+
+    <h2>Shopping List</h2>
+
+    <app-shopping-add-item (addItemEvent)="onAddItem($event)">
+
+    </app-shopping-add-item>
+
+    <hr>
+
+    <ul class="list-group">
+      <li class="list-group-item" *ngFor="let item of items">
+        <div class="d-flex justify-content-between">
+
+          <input type="text" readonly onfocus="this.blur();"
+                 [(ngModel)]="item.name"
+                 class="form-control" id="new-item-name">
+
+          <button class="btn btn-link text-primary"
+                  (click)="selectItem(item)">Select</button>
+
+          <button class="btn btn-link text-danger"
+                  (click)="removeItem(item.id)">Delete</button>
+
+        </div>
+      </li>
+    </ul>
+
+    <div *ngIf="selectedItem">
+      <hr>
+
+      <app-shopping-edit-item
+        (updateItemEvent)="onUpdateItem($event)"
+        [itemName]="selectedItem.name">
+
+      </app-shopping-edit-item>
+
+    </div>
+
+
+  </div>
+</div>
+
+
+
