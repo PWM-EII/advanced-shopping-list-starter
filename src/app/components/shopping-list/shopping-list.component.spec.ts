@@ -5,6 +5,7 @@ import { ShoppingListComponent } from './shopping-list.component';
 import {ShoppingService} from "../../services/shopping.service";
 import {ShoppingEditItemComponent} from "../shopping-edit-item/shopping-edit-item.component";
 import {ShoppingAddItemComponent} from "../shopping-add-item/shopping-add-item.component";
+import {ShoppingItem} from "../../models/shopping-item.model";
 
 describe('ShoppingListComponent', () => {
   let component: ShoppingListComponent;
@@ -20,8 +21,7 @@ describe('ShoppingListComponent', () => {
       ],
       imports: [ FormsModule ],
       providers: [ ShoppingService ]
-    })
-      .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -42,7 +42,6 @@ describe('ShoppingListComponent', () => {
       { id: 2, name: 'Bananas' },
       { id: 3, name: 'Oranges' },
     ];
-
     jest.spyOn(shoppingService, 'getItems').mockReturnValue(items);
     component.ngOnInit();
 
@@ -97,7 +96,12 @@ describe('ShoppingListComponent', () => {
   });
 
   test('should update an item in the service', () => {
-    const item = { id: 1, name: 'test' };
+    const items: ShoppingItem[] = [
+      { id: 1, name: 'Apples' },
+      { id: 2, name: 'Bananas' },
+      { id: 3, name: 'Oranges' }
+    ];
+    const item = { id: 1, name: 'Apple' };
     jest.spyOn(shoppingService, 'updateItem');
 
     component.selectItem(item);
@@ -107,7 +111,7 @@ describe('ShoppingListComponent', () => {
       fixture.nativeElement.querySelector('app-shopping-edit-item');
     const inputField = childComponent.querySelector('input[data-test="input"]');
 
-    inputField.value = 'test1';
+    inputField.value = 'Apples';
     inputField.dispatchEvent(new Event('input'));
     fixture.detectChanges();
 
@@ -115,24 +119,38 @@ describe('ShoppingListComponent', () => {
     button.click();
     fixture.detectChanges();
 
-    expect(shoppingService.updateItem).toHaveBeenCalledWith(item.id, 'test1');
+    expect(shoppingService.updateItem).toHaveBeenCalledWith(item.id, 'Apples');
+    expect(component.items).toEqual(items);
   });
 
+
   test('should remove item when removeItem() is called', () => {
+    const items: ShoppingItem[] = [
+      { id: 1, name: 'Apples' },
+      { id: 3, name: 'Oranges' }
+    ];
     const itemId = 2;
     jest.spyOn(shoppingService, 'removeItem');
 
     component.removeItem(itemId);
 
     expect(shoppingService.removeItem).toHaveBeenCalledWith(itemId);
+    expect(component.items).toEqual(items);
   });
 
   test('should add item when onAddItem() is called', () => {
-    const testItemName = 'test';
+    const items: ShoppingItem[] = [
+      { id: 1, name: 'Apples' },
+      { id: 2, name: 'Bananas' },
+      { id: 3, name: 'Oranges' },
+      { id: 4, name: 'Milk' }
+    ];
+
+    const testItemName = 'Milk';
     jest.spyOn(shoppingService, 'addItem');
     component.onAddItem(testItemName);
     expect(shoppingService.addItem).toHaveBeenCalledWith(testItemName);
-    expect(component.items.length).toBeGreaterThan(0);
+    expect(component.items).toEqual(items);
   });
 
 });

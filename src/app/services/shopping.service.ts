@@ -15,7 +15,7 @@ export class ShoppingService {
   private nextId = 4;
 
   getItems(): ShoppingItem[] {
-    return this.items;
+    return this.items.map(x => Object.assign({}, x));
   }
 
   addItem(name: string): void {
